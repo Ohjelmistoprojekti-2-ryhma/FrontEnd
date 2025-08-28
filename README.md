@@ -1,1 +1,2 @@
 # FrontEnd
+Käytetyt teknologiat: React
