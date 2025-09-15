@@ -30,11 +30,23 @@ const html = `
         attribution: '© OpenStreetMap'
       }).addTo(map);
 
-      
       map.on('click', function(e) {
-        L.marker([e.latlng.lat, e.latlng.lng]).addTo(map)
-          .bindPopup('Merkki: ' + e.latlng.lat.toFixed(5) + ', ' + e.latlng.lng.toFixed(5))
+        // Kysy käyttäjältä nimi/tiedot merkille
+        var userText = prompt("Anna merkille nimi tai kuvaus:");
+
+        // Jos käyttäjä ei kirjoita mitään, käytetään koordinaatteja
+        if (!userText) {
+          userText = 'Merkki: ' + e.latlng.lat.toFixed(5) + ', ' + e.latlng.lng.toFixed(5);
+        }
+
+        var marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map)
+          .bindPopup(userText + '<br><b>Klikkaa poistaaksesi</b>')
           .openPopup();
+
+        // Poisto-ominaisuus klikkaamalla markkeria
+        marker.on('click', function() {
+          map.removeLayer(marker);
+        });
       });
     </script>
   </body>
