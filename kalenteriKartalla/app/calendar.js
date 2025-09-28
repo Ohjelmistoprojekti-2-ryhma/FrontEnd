@@ -1,4 +1,3 @@
-// CalendarScreen.js
 import React, { useState, useEffect } from "react";
 import {
     SafeAreaView,
@@ -18,11 +17,24 @@ export default function CalendarScreen({ navigation, route }) {
 
     const [selectedDate, setSelectedDate] = useState("2025-09-14");
 
+    // Add new event 
     useEffect(() => {
         if (route.params?.newEvent) {
             setEvents((prev) => [...prev, route.params.newEvent]);
         }
     }, [route.params?.newEvent]);
+
+    // Update event
+    const editEvent = (updatedEvent) => {
+        setEvents((prev) =>
+            prev.map((event) => (event.id === updatedEvent.id ? updatedEvent : event))
+        );
+    };
+
+    // Delete event
+    const deleteEvent = (eventId) => {
+        setEvents((prev) => prev.filter((event) => event.id !== eventId));
+    };
 
     const selectedEvents = events.filter((e) => e.date === selectedDate);
 
@@ -39,6 +51,16 @@ export default function CalendarScreen({ navigation, route }) {
                 onDayPress={(day) => setSelectedDate(day.dateString)}
                 markedDates={{
                     [selectedDate]: { selected: true, selectedColor: "#fa858f" },
+                    ...events.reduce((acc, event) => {
+                        acc[event.date] = {
+                            marked: true,
+                            dotColor: "#fa858f",
+                            ...(selectedDate === event.date
+                                ? { selected: true, selectedColor: "#fa858f" }
+                                : {}),
+                        };
+                        return acc;
+                    }, {}),
                 }}
                 firstDay={1}
             />
@@ -50,7 +72,20 @@ export default function CalendarScreen({ navigation, route }) {
                     <FlatList
                         data={selectedEvents}
                         keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item }) => <Text>- {item.title}</Text>}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                style={styles.eventItem}
+                                onPress={() =>
+                                    navigation.navigate("EditEvent", {
+                                        event: item,
+                                        onSaveEdit: editEvent,
+                                        onDelete: deleteEvent,
+                                    })
+                                }
+                            >
+                                <Text style={styles.eventText}>- {item.title}</Text>
+                            </TouchableOpacity>
+                        )}
                     />
                 ) : (
                     <Text>No events for today</Text>
@@ -85,6 +120,14 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: "bold",
         marginBottom: 5,
+    },
+    eventItem: {
+        paddingVertical: 8,
+        borderBottomWidth: 1,
+        borderBottomColor: "#ddd",
+    },
+    eventText: {
+        fontSize: 16,
     },
     fab: {
         position: "absolute",
