@@ -9,12 +9,15 @@ import {
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 
+// A few example events
 export default function CalendarScreen({ navigation, route }) {
     const [events, setEvents] = useState([
         { id: 1, date: "2025-09-14", title: "Coffee with friends" },
         { id: 2, date: "2025-09-15", title: "Student event" },
     ]);
 
+
+    // Default selected day
     const [selectedDate, setSelectedDate] = useState("2025-09-14");
 
     // Add new event 
@@ -92,7 +95,7 @@ export default function CalendarScreen({ navigation, route }) {
                 )}
             </View>
 
-            {/* Button to Add Event */}
+            {/* Button to add event */}
             <TouchableOpacity
                 style={styles.fab}
                 onPress={() =>
