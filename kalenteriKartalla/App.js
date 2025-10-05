@@ -7,7 +7,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Map from "./app/map";
 import Calendar from "./app/calendar";
 import AddEvent from "./app/AddEvent";
-import EditEvent from "./app/EditEventScreen"; 
+import EditEvent from "./app/EditEventScreen";
 
 const Tab = createBottomTabNavigator();
 const CalendarStack = createNativeStackNavigator();
@@ -26,7 +26,7 @@ function CalendarStackNavigator() {
         options={{ title: "Add New Event" }}
       />
       <CalendarStack.Screen
-        name="EditEvent" 
+        name="EditEvent"
         component={EditEvent}
         options={{ title: "Edit Event" }}
       />
@@ -41,7 +41,7 @@ export default function App() {
         <Tab.Screen
           name="Calendar"
           component={CalendarStackNavigator}
-          options={{ headerShown: false }} 
+          options={{ headerShown: false }}
         />
         <Tab.Screen name="Map" component={Map} />
       </Tab.Navigator>

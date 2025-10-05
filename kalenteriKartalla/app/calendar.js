@@ -20,13 +20,6 @@ export default function CalendarScreen({ navigation, route }) {
     // Default selected day
     const [selectedDate, setSelectedDate] = useState("2025-09-14");
 
-    // Add new event 
-    useEffect(() => {
-        if (route.params?.newEvent) {
-            setEvents((prev) => [...prev, route.params.newEvent]);
-        }
-    }, [route.params?.newEvent]);
-
     // Update event
     const editEvent = (updatedEvent) => {
         setEvents((prev) =>

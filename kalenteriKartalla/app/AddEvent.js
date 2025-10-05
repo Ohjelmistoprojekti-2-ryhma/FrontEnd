@@ -30,7 +30,7 @@ export default function AddEventScreen({ navigation, route }) {
       id: Date.now(),
       date: selectedDate,
       title: title.trim(),
-      location: coords,
+      location: selectedLocation,
     };
 
     if (typeof onSave === "function") {
@@ -62,7 +62,7 @@ export default function AddEventScreen({ navigation, route }) {
         onPress={() =>
           navigation.navigate("Map", {
             eventTitle: title || "Untitled Event",
-            onSelectLocation: (coords) => handleSave(coords), // ⬅ sijainnin valinta tallentaa heti
+            onSelectLocation: (coords) => setSelectedLocation(coords), // ⬅ sijainnin valinta tallentaa heti
           })
         }
       >

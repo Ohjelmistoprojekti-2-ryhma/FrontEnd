@@ -61,7 +61,9 @@ export default function Map({ navigation, route }) {
       if (onSelectLocation) {
         onSelectLocation(coords);
       }
-      navigation.goBack();
+      if (navigation.canGoBack()) {
+        navigation.goBack();
+      }
     } catch (err) {
       console.warn("Invalid data from map:", err);
     }
