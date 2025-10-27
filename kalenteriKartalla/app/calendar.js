@@ -9,18 +9,27 @@ import {
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 
-// A few example events
 export default function CalendarScreen({ navigation, route }) {
     const [events, setEvents] = useState([
-        { id: 1, date: "2025-09-14", title: "Coffee with friends" },
-        { id: 2, date: "2025-09-15", title: "Student event" },
+        {
+            id: 1,
+            date: "2025-09-14",
+            title: "Coffee with friends",
+            time: "10:30",
+            description: "Morning meetup at the café",
+        },
+        {
+            id: 2,
+            date: "2025-09-15",
+            title: "Student event",
+            time: "18:00",
+            description: "Evening hangout at the campus park",
+        },
     ]);
 
-
-    // Default selected day
     const [selectedDate, setSelectedDate] = useState("2025-09-14");
 
-    // Update event
+    // Update event after editing
     const editEvent = (updatedEvent) => {
         setEvents((prev) =>
             prev.map((event) => (event.id === updatedEvent.id ? updatedEvent : event))
@@ -32,9 +41,22 @@ export default function CalendarScreen({ navigation, route }) {
         setEvents((prev) => prev.filter((event) => event.id !== eventId));
     };
 
-    const selectedEvents = events.filter((e) => e.date === selectedDate);
+    // Add event from AddEventScreen
+    useEffect(() => {
+        if (route.params?.newEvent) {
+            setEvents((prev) => [...prev, route.params.newEvent]);
+        }
+    }, [route.params?.newEvent]);
 
-    // Formatting the date:
+    // Filter and sort events by time
+    const selectedEvents = events
+        .filter((e) => e.date === selectedDate)
+        .sort((a, b) => {
+            if (!a.time) return 1;
+            if (!b.time) return -1;
+            return a.time.localeCompare(b.time);
+        });
+
     const formatDate = (unformattedDate) => {
         const parts = unformattedDate.split("-");
         return `${parseInt(parts[2])}.${parseInt(parts[1])}.${parts[0]}`;
@@ -61,9 +83,12 @@ export default function CalendarScreen({ navigation, route }) {
                 firstDay={1}
             />
 
-            {/* Events */}
+            {/* Event List */}
             <View style={styles.eventList}>
-                <Text style={styles.title}>Events on {formatDate(selectedDate)}:</Text>
+                <Text style={styles.title}>
+                    Events on {formatDate(selectedDate)}:
+                </Text>
+
                 {selectedEvents.length > 0 ? (
                     <FlatList
                         data={selectedEvents}
@@ -79,16 +104,24 @@ export default function CalendarScreen({ navigation, route }) {
                                     })
                                 }
                             >
-                                <Text style={styles.eventText}>- {item.title}</Text>
+                                <Text style={styles.eventText}>
+                                    {item.title}
+                                    {item.time ? ` at ${item.time}` : ""}
+                                </Text>
+                                {item.description ? (
+                                    <Text style={styles.eventDescription}>
+                                        {item.description}
+                                    </Text>
+                                ) : null}
                             </TouchableOpacity>
                         )}
                     />
                 ) : (
-                    <Text>No events for today</Text>
+                    <Text style={styles.noEvents}>No events for this day</Text>
                 )}
             </View>
 
-            {/* Button to add event */}
+            {/* Add Event Button */}
             <TouchableOpacity
                 style={styles.fab}
                 onPress={() =>
@@ -104,9 +137,11 @@ export default function CalendarScreen({ navigation, route }) {
     );
 }
 
+// Styles
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: "#fff",
     },
     eventList: {
         padding: 10,
@@ -115,15 +150,36 @@ const styles = StyleSheet.create({
     },
     title: {
         fontWeight: "bold",
-        marginBottom: 5,
+        marginBottom: 10,
+        fontSize: 16,
     },
     eventItem: {
-        paddingVertical: 8,
-        borderBottomWidth: 1,
-        borderBottomColor: "#ddd",
+        backgroundColor: "#fff",
+        padding: 12,
+        borderRadius: 10,
+        marginBottom: 10,
+        borderWidth: 1,
+        borderColor: "#ddd",
+        shadowColor: "#000",
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        elevation: 1,
     },
     eventText: {
         fontSize: 16,
+        color: "#333",
+        fontWeight: "500",
+    },
+    eventDescription: {
+        fontSize: 14,
+        color: "#666",
+        marginTop: 4,
+        marginLeft: 5,
+    },
+    noEvents: {
+        color: "#888",
+        textAlign: "center",
+        marginTop: 20,
     },
     fab: {
         position: "absolute",
