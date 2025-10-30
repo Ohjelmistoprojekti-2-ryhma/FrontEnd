@@ -24,12 +24,15 @@ export default function EditEventScreen({ navigation, route }) {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
 
+
+    // Save the edited event
     const handleSave = () => {
         if (!title.trim()) {
             Alert.alert("Error", "Please enter an event title.");
             return;
         }
 
+        // Format date and time
         const formattedDate = date.toISOString().split("T")[0];
         const formattedTime = time.toTimeString().slice(0, 5); // HH:MM
 
@@ -44,6 +47,7 @@ export default function EditEventScreen({ navigation, route }) {
         navigation.goBack();
     };
 
+    //Delete the event
     const handleDelete = () => {
         Alert.alert("Delete Event", "Are you sure you want to delete this event?", [
             { text: "Cancel", style: "cancel" },
@@ -57,7 +61,7 @@ export default function EditEventScreen({ navigation, route }) {
             },
         ]);
     };
-
+    // Format date to dd.mm.yyyy
     const formatDate = (dateObj) => {
         const day = dateObj.getDate();
         const month = dateObj.getMonth() + 1;
@@ -65,6 +69,7 @@ export default function EditEventScreen({ navigation, route }) {
         return `${day}.${month}.${year}`;
     };
 
+    // Format time to hh:mm
     const formatTime = (dateObj) => {
         const hours = dateObj.getHours().toString().padStart(2, "0");
         const minutes = dateObj.getMinutes().toString().padStart(2, "0");
