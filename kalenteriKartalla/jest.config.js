@@ -19,4 +19,10 @@ module.exports = {
   setupFilesAfterEnv: ['@testing-library/jest-native/extend-expect'],
   testPathIgnorePatterns: ['/node_modules/', '/android/', '/ios/'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
+
+  testMatch: [
+    '**/__tests__/**/*.[jt]s?(x)',
+    '**/?(*.)+(spec|test).[tj]s?(x)',
+    '**/tests/**/*.[jt]s?(x)',
+  ],
 };
