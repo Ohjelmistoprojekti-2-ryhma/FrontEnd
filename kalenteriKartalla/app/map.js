@@ -1,78 +1,53 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useRef, useCallback } from "react";
+import { View } from "react-native";
 import { WebView } from "react-native-webview";
+import { useFocusEffect } from "@react-navigation/native";
 import mapStyles from "../components/MapStyles";
+import { getMapHTML } from "../components/getMapHTML";
 
 export default function Map({ navigation, route }) {
+  // Retrieve parameters passed from navigation
   const onSelectLocation = route.params?.onSelectLocation;
   const eventTitle = route.params?.eventTitle || "Event";
+  const events = route.params?.events || [];
 
-  const safeTitle = JSON.stringify(eventTitle); // suojaa erikoismerkeiltä
+  // Reference to the WebView component (used for updating the map)
+  // (currently, updating is not working properly)
+  const webviewRef = useRef(null);
 
-  const html = `
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <meta charset="utf-8" />
-      <title>OSM Leaflet Map</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link 
-        rel="stylesheet" 
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      />
-      <style>
-        #map { height: 100vh; width: 100vw; margin: 0; padding: 0; }
-        body { margin: 0; }
-      </style>
-    </head>
-    <body>
-      <div id="map"></div>
-      <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-      <script>
-        var map = L.map('map').setView([60.1699, 24.9384], 13);
+  // Loads the WebView content from an external HTML file
+  const html = getMapHTML(events, eventTitle);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 19,
-          attribution: '© OpenStreetMap'
-        }).addTo(map);
-
-        var marker;
-
-        map.on('click', function(e) {
-          if (marker) {
-            map.removeLayer(marker);
-          }
-
-          marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map)
-            .bindPopup(${safeTitle})
-            .openPopup();
-
-          window.ReactNativeWebView.postMessage(
-            JSON.stringify({ lat: e.latlng.lat, lng: e.latlng.lng })
-          );
-        });
-      </script>
-    </body>
-  </html>
-  `;
-
+  // Handles messages received from the map (user-selected coordinates)
   const handleMessage = (event) => {
     try {
       const coords = JSON.parse(event.nativeEvent.data);
-      if (onSelectLocation) {
-        onSelectLocation(coords);
-      }
-      if (navigation.canGoBack()) {
-        navigation.goBack();
-      }
+      if (onSelectLocation) onSelectLocation(coords);
+      navigation.goBack();
     } catch (err) {
       console.warn("Invalid data from map:", err);
     }
   };
 
+  // Updates map markers whenever the screen is focused again
+  // (again, currently not working)
+  useFocusEffect(
+    useCallback(() => {
+      if (webviewRef.current) {
+        webviewRef.current.injectJavaScript(`
+          if (window.updateEvents) {
+            window.updateEvents(${JSON.stringify(route.params?.events || [])});
+          }
+          true;
+        `);
+      }
+    }, [route.params?.events])
+  );
+
   return (
     <View style={mapStyles.container}>
       <WebView
+        ref={webviewRef}
         originWhitelist={["*"]}
         source={{ html }}
         style={{ flex: 1 }}
@@ -81,4 +56,3 @@ export default function Map({ navigation, route }) {
     </View>
   );
 }
-

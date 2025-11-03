@@ -109,8 +109,10 @@ export default function AddEventScreen({ navigation, route }) {
           navigation.navigate("Map", {
             eventTitle: title || "Untitled Event",
             onSelectLocation: (coords) => setSelectedLocation(coords),
+            events: route.params?.allEvents || [], 
           })
         }
+
       >
         <Text style={addEventStyles.locationButtonText}>
           {selectedLocation

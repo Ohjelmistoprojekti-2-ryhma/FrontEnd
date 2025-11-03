@@ -129,9 +129,12 @@ export default function CalendarScreen({ navigation, route }) {
                     navigation.navigate("AddEvent", {
                         selectedDate,
                         onSave: (newEvent) => setEvents((prev) => [...prev, newEvent]),
+                        location: null,
+                        allEvents: events, 
                     })
                 }
             >
+                
                 <Text style={calendarStyles.fabText}>+</Text>
             </TouchableOpacity>
         </SafeAreaView>
