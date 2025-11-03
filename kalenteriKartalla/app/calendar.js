@@ -8,6 +8,7 @@ import {
     TouchableOpacity,
 } from "react-native";
 import { Calendar } from "react-native-calendars";
+import calendarStyles from "../components/CalendarStyles";
 
 export default function CalendarScreen({ navigation, route }) {
     const [events, setEvents] = useState([
@@ -63,7 +64,7 @@ export default function CalendarScreen({ navigation, route }) {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={calendarStyles.container}>
             {/* Calendar */}
             <Calendar
                 onDayPress={(day) => setSelectedDate(day.dateString)}
@@ -84,8 +85,8 @@ export default function CalendarScreen({ navigation, route }) {
             />
 
             {/* Event List */}
-            <View style={styles.eventList}>
-                <Text style={styles.title}>
+            <View style={calendarStyles.eventList}>
+                <Text style={calendarStyles.title}>
                     Events on {formatDate(selectedDate)}:
                 </Text>
 
@@ -95,7 +96,7 @@ export default function CalendarScreen({ navigation, route }) {
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => (
                             <TouchableOpacity
-                                style={styles.eventItem}
+                                style={calendarStyles.eventItem}
                                 onPress={() =>
                                     navigation.navigate("EditEvent", {
                                         event: item,
@@ -104,12 +105,12 @@ export default function CalendarScreen({ navigation, route }) {
                                     })
                                 }
                             >
-                                <Text style={styles.eventText}>
+                                <Text style={calendarStyles.eventText}>
                                     {item.title}
                                     {item.time ? ` at ${item.time}` : ""}
                                 </Text>
                                 {item.description ? (
-                                    <Text style={styles.eventDescription}>
+                                    <Text style={calendarStyles.eventDescription}>
                                         {item.description}
                                     </Text>
                                 ) : null}
@@ -117,13 +118,13 @@ export default function CalendarScreen({ navigation, route }) {
                         )}
                     />
                 ) : (
-                    <Text style={styles.noEvents}>No events for this day</Text>
+                    <Text style={calendarStyles.noEvents}>No events for this day</Text>
                 )}
             </View>
 
             {/* Add Event Button */}
             <TouchableOpacity
-                style={styles.fab}
+                style={calendarStyles.fab}
                 onPress={() =>
                     navigation.navigate("AddEvent", {
                         selectedDate,
@@ -131,71 +132,10 @@ export default function CalendarScreen({ navigation, route }) {
                     })
                 }
             >
-                <Text style={styles.fabText}>+</Text>
+                <Text style={calendarStyles.fabText}>+</Text>
             </TouchableOpacity>
         </SafeAreaView>
     );
 }
 
-// Styles
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-    },
-    eventList: {
-        padding: 10,
-        backgroundColor: "#f5f5f5",
-        flex: 1,
-    },
-    title: {
-        fontWeight: "bold",
-        marginBottom: 10,
-        fontSize: 16,
-    },
-    eventItem: {
-        backgroundColor: "#fff",
-        padding: 12,
-        borderRadius: 10,
-        marginBottom: 10,
-        borderWidth: 1,
-        borderColor: "#ddd",
-        shadowColor: "#000",
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-        elevation: 1,
-    },
-    eventText: {
-        fontSize: 16,
-        color: "#333",
-        fontWeight: "500",
-    },
-    eventDescription: {
-        fontSize: 14,
-        color: "#666",
-        marginTop: 4,
-        marginLeft: 5,
-    },
-    noEvents: {
-        color: "#888",
-        textAlign: "center",
-        marginTop: 20,
-    },
-    fab: {
-        position: "absolute",
-        bottom: 20,
-        right: 20,
-        backgroundColor: "#fa858f",
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        alignItems: "center",
-        justifyContent: "center",
-        elevation: 5,
-    },
-    fabText: {
-        color: "#fff",
-        fontSize: 30,
-        fontWeight: "bold",
-    },
-});
+

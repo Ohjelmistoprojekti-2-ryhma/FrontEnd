@@ -10,6 +10,7 @@ import {
     Platform,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import editEventStyles from "../components/EditEventStyles";
 
 export default function EditEventScreen({ navigation, route }) {
     const { event, onSaveEdit, onDelete } = route.params;
@@ -77,23 +78,23 @@ export default function EditEventScreen({ navigation, route }) {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <Text style={styles.header}>Edit Event</Text>
+        <SafeAreaView style={editEventStyles.container}>
+            <Text style={editEventStyles.header}>Edit Event</Text>
 
-            <View style={styles.form}>
+            <View style={editEventStyles.form}>
                 {/* Title */}
-                <Text style={styles.label}>Event Title</Text>
+                <Text style={editEventStyles.label}>Event Title</Text>
                 <TextInput
-                    style={styles.input}
+                    style={editEventStyles.input}
                     value={title}
                     onChangeText={setTitle}
                     placeholder="Event title"
                 />
 
                 {/* Description */}
-                <Text style={styles.label}>Description</Text>
+                <Text style={editEventStyles.label}>Description</Text>
                 <TextInput
-                    style={[styles.input, { height: 80 }]}
+                    style={[editEventStyles.input, { height: 80 }]}
                     value={description}
                     onChangeText={setDescription}
                     placeholder="Event description"
@@ -101,13 +102,13 @@ export default function EditEventScreen({ navigation, route }) {
                 />
 
                 {/* Date */}
-                <Text style={styles.label}>Date</Text>
-                <Text style={styles.dateText}>{formatDate(date)}</Text>
+                <Text style={editEventStyles.label}>Date</Text>
+                <Text style={editEventStyles.dateText}>{formatDate(date)}</Text>
                 <TouchableOpacity
-                    style={styles.changeButton}
+                    style={editEventStyles.changeButton}
                     onPress={() => setShowDatePicker(true)}
                 >
-                    <Text style={styles.changeButtonText}>Change Date</Text>
+                    <Text style={editEventStyles.changeButtonText}>Change Date</Text>
                 </TouchableOpacity>
 
                 {showDatePicker && (
@@ -125,13 +126,13 @@ export default function EditEventScreen({ navigation, route }) {
                 )}
 
                 {/* Time */}
-                <Text style={styles.label}>Time</Text>
-                <Text style={styles.dateText}>{formatTime(time)}</Text>
+                <Text style={editEventStyles.label}>Time</Text>
+                <Text style={editEventStyles.dateText}>{formatTime(time)}</Text>
                 <TouchableOpacity
-                    style={styles.changeButton}
+                    style={editEventStyles.changeButton}
                     onPress={() => setShowTimePicker(true)}
                 >
-                    <Text style={styles.changeButtonText}>Change Time</Text>
+                    <Text style={editEventStyles.changeButtonText}>Change Time</Text>
                 </TouchableOpacity>
 
                 {showTimePicker && (
@@ -150,83 +151,16 @@ export default function EditEventScreen({ navigation, route }) {
                 )}
 
                 {/* Save/Delete Buttons */}
-                <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-                    <Text style={styles.saveButtonText}>Save Changes</Text>
+                <TouchableOpacity style={editEventStyles.saveButton} onPress={handleSave}>
+                    <Text style={editEventStyles.saveButtonText}>Save Changes</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
-                    <Text style={styles.deleteButtonText}>Delete Event</Text>
+                <TouchableOpacity style={editEventStyles.deleteButton} onPress={handleDelete}>
+                    <Text style={editEventStyles.deleteButtonText}>Delete Event</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-    },
-    header: {
-        fontSize: 22,
-        fontWeight: "bold",
-        textAlign: "center",
-        marginVertical: 10,
-        color: "#333",
-    },
-    form: {
-        padding: 20,
-    },
-    label: {
-        fontSize: 16,
-        fontWeight: "bold",
-        marginBottom: 8,
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: "#ccc",
-        borderRadius: 8,
-        padding: 10,
-        marginBottom: 15,
-    },
-    dateText: {
-        fontSize: 16,
-        marginBottom: 10,
-        color: "#333",
-    },
-    changeButton: {
-        backgroundColor: "#fa858f",
-        paddingVertical: 10,
-        alignItems: "center",
-        borderRadius: 8,
-        marginBottom: 15,
-    },
-    changeButtonText: {
-        color: "#fff",
-        fontWeight: "bold",
-        fontSize: 16,
-    },
-    saveButton: {
-        backgroundColor: "#fa858f",
-        paddingVertical: 12,
-        alignItems: "center",
-        borderRadius: 8,
-        marginBottom: 15,
-    },
-    saveButtonText: {
-        color: "#fff",
-        fontWeight: "bold",
-        fontSize: 16,
-    },
-    deleteButton: {
-        backgroundColor: "#ff4d4d",
-        paddingVertical: 12,
-        alignItems: "center",
-        borderRadius: 8,
-    },
-    deleteButtonText: {
-        color: "#fff",
-        fontWeight: "bold",
-        fontSize: 16,
-    },
-});
+

@@ -9,6 +9,7 @@ import {
   Platform,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import addEventStyles from "../components/AddEventStyles";
 
 export default function AddEventScreen({ navigation, route }) {
   const { selectedDate, onSave, location } = route.params || {};
@@ -61,30 +62,30 @@ export default function AddEventScreen({ navigation, route }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Date: {selectedDate}</Text>
+    <View style={addEventStyles.container}>
+      <Text style={addEventStyles.label}>Date: {selectedDate}</Text>
 
       <TextInput
-        style={styles.input}
+        style={addEventStyles.input}
         placeholder="Enter event title"
         value={title}
         onChangeText={setTitle}
       />
 
       <TextInput
-        style={[styles.input, { height: 80 }]}
+        style={[addEventStyles.input, { height: 80 }]}
         placeholder="Enter event description"
         value={description}
         onChangeText={setDescription}
         multiline
       />
 
-      <Text style={styles.label}>Time: {formatTime(time)}</Text>
+      <Text style={addEventStyles.label}>Time: {formatTime(time)}</Text>
       <TouchableOpacity
-        style={styles.timeButton}
+        style={addEventStyles.timeButton}
         onPress={() => setShowTimePicker(true)}
       >
-        <Text style={styles.timeButtonText}>Select Time</Text>
+        <Text style={addEventStyles.timeButtonText}>Select Time</Text>
       </TouchableOpacity>
 
       {showTimePicker && (
@@ -103,7 +104,7 @@ export default function AddEventScreen({ navigation, route }) {
       )}
 
       <TouchableOpacity
-        style={styles.locationButton}
+        style={addEventStyles.locationButton}
         onPress={() =>
           navigation.navigate("Map", {
             eventTitle: title || "Untitled Event",
@@ -111,68 +112,18 @@ export default function AddEventScreen({ navigation, route }) {
           })
         }
       >
-        <Text style={styles.locationButtonText}>
+        <Text style={addEventStyles.locationButtonText}>
           {selectedLocation
             ? `Location: ${selectedLocation.lat.toFixed(4)}, ${selectedLocation.lng.toFixed(4)}`
             : "Select location on map"}
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.saveButton} onPress={() => handleSave()}>
-        <Text style={styles.saveButtonText}>Save Event</Text>
+      <TouchableOpacity style={addEventStyles.saveButton} onPress={() => handleSave()}>
+        <Text style={addEventStyles.saveButtonText}>Save Event</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#fff",
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 20,
-  },
-  timeButton: {
-    backgroundColor: "#fa858f",
-    paddingVertical: 10,
-    alignItems: "center",
-    borderRadius: 8,
-    marginBottom: 20,
-  },
-  timeButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  locationButton: {
-    backgroundColor: "#ddd",
-    paddingVertical: 12,
-    alignItems: "center",
-    borderRadius: 8,
-    marginBottom: 20,
-  },
-  locationButtonText: {
-    color: "#333",
-    fontSize: 14,
-  },
-  saveButton: {
-    backgroundColor: "#fa858f",
-    paddingVertical: 12,
-    alignItems: "center",
-    borderRadius: 8,
-  },
-  saveButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-});
+

@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { WebView } from "react-native-webview";
+import mapStyles from "../components/MapStyles";
 
 export default function Map({ navigation, route }) {
   const onSelectLocation = route.params?.onSelectLocation;
@@ -70,7 +71,7 @@ export default function Map({ navigation, route }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={mapStyles.container}>
       <WebView
         originWhitelist={["*"]}
         source={{ html }}
@@ -81,8 +82,3 @@ export default function Map({ navigation, route }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
