@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useCallback, useState } from "react";
 import { View } from "react-native";
 import { WebView } from "react-native-webview";
 import { useFocusEffect } from "@react-navigation/native";
@@ -6,19 +6,15 @@ import mapStyles from "../components/MapStyles";
 import { getMapHTML } from "../components/getMapHTML";
 
 export default function Map({ navigation, route }) {
-  // Retrieve parameters passed from navigation
   const onSelectLocation = route.params?.onSelectLocation;
   const eventTitle = route.params?.eventTitle || "Event";
   const events = route.params?.events || [];
 
-  // Reference to the WebView component (used for updating the map)
-  // (currently, updating is not working properly)
   const webviewRef = useRef(null);
+  const [webViewReady, setWebViewReady] = useState(false); // track if the map has loaded
 
-  // Loads the WebView content from an external HTML file
   const html = getMapHTML(events, eventTitle);
 
-  // Handles messages received from the map (user-selected coordinates)
   const handleMessage = (event) => {
     try {
       const coords = JSON.parse(event.nativeEvent.data);
@@ -29,19 +25,33 @@ export default function Map({ navigation, route }) {
     }
   };
 
-  // Updates map markers whenever the screen is focused again
-  // (again, currently not working)
+   // When the WebView has loaded, set state and update the map
+  const handleLoadEnd = () => {
+    setWebViewReady(true);
+    if (webviewRef.current) {
+      webviewRef.current.injectJavaScript(`
+        if (window.updateEvents) {
+          window.updateEvents(${JSON.stringify(events)});
+        }
+        true;
+      `);
+      console.log("Kartta päivitetty ensimmäisen latauksen jälkeen");
+    }
+  };
+
+  // When the view is reopened (focus returns to the map)
   useFocusEffect(
     useCallback(() => {
-      if (webviewRef.current) {
+      if (webviewRef.current && webViewReady) {
         webviewRef.current.injectJavaScript(`
           if (window.updateEvents) {
-            window.updateEvents(${JSON.stringify(route.params?.events || [])});
+            window.updateEvents(${JSON.stringify(events)});
           }
           true;
         `);
+        console.log("Kartta päivitetty kun näkymä aktivoitui");
       }
-    }, [route.params?.events])
+    }, [events, webViewReady])
   );
 
   return (
@@ -51,6 +61,8 @@ export default function Map({ navigation, route }) {
         originWhitelist={["*"]}
         source={{ html }}
         style={{ flex: 1 }}
+        javaScriptEnabled={true}
+        onLoadEnd={handleLoadEnd}  
         onMessage={handleMessage}
       />
     </View>
