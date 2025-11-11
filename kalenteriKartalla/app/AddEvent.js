@@ -25,6 +25,7 @@ export default function AddEventScreen({ navigation, route }) {
     }
   }, [location]);
 
+  // Save the new event
   const handleSave = (coords = selectedLocation) => {
     if (!title.trim()) {
       Alert.alert("Error", "Please enter an event title.");
@@ -33,6 +34,7 @@ export default function AddEventScreen({ navigation, route }) {
 
     const formattedTime = time.toTimeString().slice(0, 5); // HH:MM
 
+    // Add a new event object
     const newEvent = {
       id: Date.now(),
       date: selectedDate,
@@ -55,6 +57,7 @@ export default function AddEventScreen({ navigation, route }) {
     navigation.navigate("CalendarMain", { newEvent });
   };
 
+  // Format time
   const formatTime = (dateObj) => {
     const hours = dateObj.getHours().toString().padStart(2, "0");
     const minutes = dateObj.getMinutes().toString().padStart(2, "0");
@@ -65,6 +68,7 @@ export default function AddEventScreen({ navigation, route }) {
     <View style={addEventStyles.container}>
       <Text style={addEventStyles.label}>Date: {selectedDate}</Text>
 
+      {/* Title */}
       <TextInput
         style={addEventStyles.input}
         placeholder="Enter event title"
@@ -72,6 +76,7 @@ export default function AddEventScreen({ navigation, route }) {
         onChangeText={setTitle}
       />
 
+      {/* Description */}
       <TextInput
         style={[addEventStyles.input, { height: 80 }]}
         placeholder="Enter event description"
@@ -88,6 +93,7 @@ export default function AddEventScreen({ navigation, route }) {
         <Text style={addEventStyles.timeButtonText}>Select Time</Text>
       </TouchableOpacity>
 
+      {/* Time Picker */}
       {showTimePicker && (
         <DateTimePicker
           value={time}
@@ -103,13 +109,14 @@ export default function AddEventScreen({ navigation, route }) {
         />
       )}
 
+      {/* Location Selector */}
       <TouchableOpacity
         style={addEventStyles.locationButton}
         onPress={() =>
           navigation.navigate("Map", {
             eventTitle: title || "Untitled Event",
             onSelectLocation: (coords) => setSelectedLocation(coords),
-            events: route.params?.allEvents || [], 
+            events: route.params?.allEvents || [],
           })
         }
 
