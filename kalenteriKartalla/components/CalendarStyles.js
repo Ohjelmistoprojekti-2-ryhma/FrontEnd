@@ -32,6 +32,12 @@ const calendarStyles = StyleSheet.create({
         color: "#333",
         fontWeight: "500",
     },
+    holidayText: {
+        fontSize: 16,
+        color: "red",
+        fontWeight: "500",
+        marginBottom: 10,
+    },
     eventDescription: {
         fontSize: 14,
         color: "#666",

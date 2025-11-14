@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Calendar } from "react-native-calendars";
 import calendarStyles from "../components/CalendarStyles";
+import holidays from "../data/holidays.json";
 
 export default function CalendarScreen({ navigation, route }) {
   const [events, setEvents] = useState([
@@ -64,13 +65,41 @@ export default function CalendarScreen({ navigation, route }) {
     return `${parseInt(parts[2])}.${parseInt(parts[1])}.${parts[0]}`;
   };
 
+  // Mark holidays
+  const holidayMarks = Object.values(holidays)
+    .flat()
+    .reduce((acc, holiday) => {
+      acc[holiday.date] = {
+        customStyles: {
+          text: { color: "red" }
+        },
+
+        ...(selectedDate === holiday.date ? {
+          selected: true, selectedColor: "#fa858f",
+          customStyles: {
+            text: { color: "#fff" }
+          }
+        }
+          : {}),
+      };
+      return acc;
+    });
+
+  const selectedHoliday = Object.values(holidays)
+    .flat()
+    .find((h) => h.date === selectedDate);
+
   return (
     <SafeAreaView style={calendarStyles.container}>
       {/* Calendar */}
       <Calendar
+        markingType="custom"
         onDayPress={(day) => setSelectedDate(day.dateString)}
         markedDates={{
           [selectedDate]: { selected: true, selectedColor: "#fa858f" },
+
+          ...holidayMarks,
+
           ...events.reduce((acc, event) => {
             acc[event.date] = {
               marked: true,
@@ -91,6 +120,16 @@ export default function CalendarScreen({ navigation, route }) {
           Events on {formatDate(selectedDate)}:
         </Text>
 
+        {/*Holidays*/}
+        {selectedHoliday && (
+          <View>
+            <Text style={calendarStyles.holidayText}>
+              {selectedHoliday.name_en}
+            </Text>
+          </View>
+        )}
+
+        {/*Events*/}
         {selectedEvents.length > 0 ? (
           <FlatList
             data={selectedEvents}
