@@ -62,6 +62,7 @@ export default function EditEventScreen({ navigation, route }) {
             },
         ]);
     };
+    
     // Format date to dd.mm.yyyy
     const formatDate = (dateObj) => {
         const day = dateObj.getDate();

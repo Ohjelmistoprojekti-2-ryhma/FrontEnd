@@ -41,7 +41,7 @@ export default function AddEventScreen({ navigation, route }) {
       title: title.trim(),
       description: description.trim(),
       time: formattedTime,
-      location: coords,
+      location: selectedLocation,
     };
 
     if (typeof onSave === "function") {

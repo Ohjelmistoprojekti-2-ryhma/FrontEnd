@@ -9,27 +9,33 @@ import {
 import { Calendar } from "react-native-calendars";
 import calendarStyles from "../components/CalendarStyles";
 import holidays from "../data/holidays.json";
+import { loadEvents, saveEvents } from "../app/storage";
 
 export default function CalendarScreen({ navigation, route }) {
-  const [events, setEvents] = useState([
-    {
-      id: 1,
-      date: "2025-09-14",
-      title: "Coffee with friends",
-      time: "10:30",
-      description: "Morning meetup at the café",
-    },
-    {
-      id: 2,
-      date: "2025-09-15",
-      title: "Student event",
-      time: "18:00",
-      description: "Evening hangout at the campus park",
-    },
-  ]);
+  const [events, setEvents] = useState([]);
 
-  const [selectedDate, setSelectedDate] = useState("2025-09-14");
+  // Set date to the current date by default
+  const [selectedDate, setSelectedDate] = useState((() => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  })());
+
   const [mapKey, setMapKey] = useState(0);
+
+  // Load events
+  useEffect(() => {
+    loadEvents().then((saved) => {
+      if (saved) {
+        setEvents(saved);
+        console.log("Loaded events:", saved);
+      }
+    });
+  }, []);
+
+  // Save events on change
+  useEffect(() => {
+    saveEvents(events);
+  }, [events]);
 
   // Delete event
   const deleteEvent = (eventId) => {
