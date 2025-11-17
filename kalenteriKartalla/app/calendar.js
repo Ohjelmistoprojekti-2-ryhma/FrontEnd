@@ -208,7 +208,7 @@ export default function CalendarScreen({ navigation, route }) {
           })
         }
       >
-        <Text style={{ color: "#fff", fontWeight: "bold" }}>Päivitä kartta</Text>
+        <Text style={{ color: "#fff", fontWeight: "bold" }}>Update map</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
