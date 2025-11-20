@@ -10,14 +10,19 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import addEventStyles from "../components/AddEventStyles";
+import { Picker } from '@react-native-picker/picker';
 
 export default function AddEventScreen({ navigation, route }) {
-  const { selectedDate, onSave, location } = route.params || {};
+  const { selectedDate, onSave, location, contacts = [] } = route.params || {};
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [time, setTime] = useState(new Date());
   const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const [contactName, setContactName] = useState("");
+  const [showPicker, setShowPicker] = useState(false);
+
 
   useEffect(() => {
     if (location) {
@@ -42,6 +47,7 @@ export default function AddEventScreen({ navigation, route }) {
       description: description.trim(),
       time: formattedTime,
       location: selectedLocation,
+      contactName: contactName,
     };
 
     if (typeof onSave === "function") {
@@ -85,6 +91,36 @@ export default function AddEventScreen({ navigation, route }) {
         multiline
       />
 
+      {/*Select Contact Button*/}
+      <TouchableOpacity
+        style={addEventStyles.changeButton}
+        onPress={() => setShowPicker(!showPicker)}
+      >
+        <Text style={addEventStyles.changeButtonText} >
+          {contactName ? `Selected Contact: ${contactName}` : "Select Contact"}
+        </Text>
+      </TouchableOpacity>
+
+      {/*Contacts */}
+      {showPicker && (
+        <View style={addEventStyles.pickerWrapper}>
+          <Picker
+            style={addEventStyles.picker}
+            selectedValue={contactName}
+            onValueChange={(value) => setContactName(value)}
+          >
+            <Picker.Item label="No contact" value="" />
+            {contacts.map((contact) => (
+              <Picker.Item key={contact.id}
+                label={`${contact.firstName || ""} ${contact.lastName || ""} (${contact.phoneNumbers?.[0]?.number || "No number"})`}
+                value={`${contact.firstName || ""} ${contact.lastName || ""}`}
+              />
+            ))}
+          </Picker>
+        </View>
+      )}
+
+
       <Text style={addEventStyles.label}>Time: {formatTime(time)}</Text>
       <TouchableOpacity
         style={addEventStyles.timeButton}
@@ -92,6 +128,7 @@ export default function AddEventScreen({ navigation, route }) {
       >
         <Text style={addEventStyles.timeButtonText}>Select Time</Text>
       </TouchableOpacity>
+
 
       {/* Time Picker */}
       {showTimePicker && (

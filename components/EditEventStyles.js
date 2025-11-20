@@ -67,6 +67,16 @@ const editEventStyles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 16,
     },
+    pickerWrapper: {
+        borderRadius: 8,
+        borderWidth: 1,
+        justifyContent: "center",
+        marginBottom: 15,
+    },
+    picker: {
+        height: 50,
+        width: "100%"
+    }
 });
 
 export default editEventStyles;

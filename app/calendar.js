@@ -10,6 +10,7 @@ import { Calendar } from "react-native-calendars";
 import calendarStyles from "../components/CalendarStyles";
 import holidays from "../data/holidays.json";
 import { loadEvents, saveEvents } from "../app/storage";
+import * as Contacts from 'expo-contacts';
 
 export default function CalendarScreen({ navigation, route }) {
   const [events, setEvents] = useState([]);
@@ -21,6 +22,25 @@ export default function CalendarScreen({ navigation, route }) {
   })());
 
   const [mapKey, setMapKey] = useState(0);
+
+  //Request contacts
+  const [contacts, setContacts] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Contacts.requestPermissionsAsync();
+      if (status === "granted") {
+        const { data } = await Contacts.getContactsAsync({
+          fields: [Contacts.Fields.PhoneNumbers, Contacts.Fields.FirstName, Contacts.Fields.LastName],
+        });
+        if (data.length > 0) {
+          setContacts(data);
+        } else {
+          Alert.alert("Warning", "No contacts found.");
+        }
+      }
+    })();
+  }, []);
 
   // Load events
   useEffect(() => {
@@ -152,6 +172,7 @@ export default function CalendarScreen({ navigation, route }) {
                       );
                     },
                     onDelete: deleteEvent,
+                    contacts: contacts,
                   })
                 }
               >
@@ -164,6 +185,13 @@ export default function CalendarScreen({ navigation, route }) {
                     {item.description}
                   </Text>
                 ) : null}
+
+                {item.contactName ? (
+                  <Text style={calendarStyles.eventDescription}>
+                    Contact: {item.contactName}
+                  </Text>
+                ) : null}
+
               </TouchableOpacity>
             )}
           />
@@ -181,6 +209,7 @@ export default function CalendarScreen({ navigation, route }) {
             onSave: (newEvent) => setEvents((prev) => [...prev, newEvent]),
             location: null,
             allEvents: events,
+            contacts: contacts,
           })
         }
       >

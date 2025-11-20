@@ -11,9 +11,10 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import editEventStyles from "../components/EditEventStyles";
+import { Picker } from '@react-native-picker/picker';
 
 export default function EditEventScreen({ navigation, route }) {
-    const { event, onSaveEdit, onDelete } = route.params;
+    const { event, onSaveEdit, onDelete, contacts } = route.params;
 
     const [title, setTitle] = useState(event.title);
     const [description, setDescription] = useState(event.description || "");
@@ -25,6 +26,8 @@ export default function EditEventScreen({ navigation, route }) {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
 
+    const [contactName, setContactName] = useState(event.contactName || "");
+    const [showPicker, setShowPicker] = useState(false);
 
     // Save the edited event
     const handleSave = () => {
@@ -43,6 +46,7 @@ export default function EditEventScreen({ navigation, route }) {
             description: description.trim(),
             date: formattedDate,
             time: formattedTime,
+            contactName: contactName,
         });
 
         navigation.goBack();
@@ -62,7 +66,7 @@ export default function EditEventScreen({ navigation, route }) {
             },
         ]);
     };
-    
+
     // Format date to dd.mm.yyyy
     const formatDate = (dateObj) => {
         const day = dateObj.getDate();
@@ -101,6 +105,37 @@ export default function EditEventScreen({ navigation, route }) {
                     placeholder="Event description"
                     multiline
                 />
+
+                {/*Select Contact Button*/}
+                <TouchableOpacity
+                    style={editEventStyles.changeButton}
+                    onPress={() => setShowPicker(!showPicker)}
+                >
+                    <Text style={editEventStyles.changeButtonText} >
+                        {contactName ? `Selected Contact: ${contactName}` : "Select Contact"}
+                    </Text>
+                </TouchableOpacity>
+
+                {/*Contacts */}
+                {showPicker && (
+                    <View style={editEventStyles.pickerWrapper}>
+                        <Picker
+                            style={editEventStyles.picker}
+                            selectedValue={contactName}
+                            onValueChange={(value) => setContactName(value)}
+                            display={Platform.OS === "ios" ? "spinner" : "default"}
+                        >
+                            <Picker.Item label="No contact" value=""
+                            />
+                            {contacts.map((contact) => (
+                                <Picker.Item key={contact.id}
+                                    label={`${contact.firstName || ""} ${contact.lastName || ""} (${contact.phoneNumbers?.[0]?.number || "No number"})`}
+                                    value={`${contact.firstName || ""} ${contact.lastName || ""}`}
+                                />
+                            ))}
+                        </Picker>
+                    </View>
+                )}
 
                 {/* Date */}
                 <Text style={editEventStyles.label}>Date</Text>
@@ -160,7 +195,7 @@ export default function EditEventScreen({ navigation, route }) {
                     <Text style={editEventStyles.deleteButtonText}>Delete Event</Text>
                 </TouchableOpacity>
             </View>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 }
 

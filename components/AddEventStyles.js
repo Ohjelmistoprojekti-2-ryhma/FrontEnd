@@ -50,6 +50,28 @@ const addEventStyles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 16,
     },
+    pickerWrapper: {
+        borderRadius: 8,
+        borderWidth: 1,
+        justifyContent: "center",
+        marginBottom: 15,
+    },
+    picker: {
+        height: 50,
+        width: "100%"
+    },
+    changeButton: {
+        backgroundColor: "#fa858f",
+        paddingVertical: 10,
+        alignItems: "center",
+        borderRadius: 8,
+        marginBottom: 15,
+    },
+    changeButtonText: {
+        color: "#fff",
+        fontWeight: "bold",
+        fontSize: 16,
+    },
 });
 
 export default addEventStyles;
