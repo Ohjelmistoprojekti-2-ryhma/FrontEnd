@@ -1,2 +1,2 @@
 # FrontEnd
-Käytetyt teknologiat: React Native, OpenStreetMap, leaflet
+Käytetyt teknologiat: React Native, OpenStreetMap, leaflet, Jest
