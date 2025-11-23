@@ -1,5 +1,6 @@
 // App.js
 import React from "react";
+import { Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -36,15 +37,24 @@ function CalendarStackNavigator() {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen
-          name="Calendar"
-          component={CalendarStackNavigator}
-          options={{ headerShown: false }}
-        />
-        <Tab.Screen name="Map" component={Map} />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
+  <NavigationContainer>
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Calendar"
+        component={CalendarStackNavigator}
+        options={{
+          headerShown: false,
+          tabBarIcon: () => <Text style={{ fontSize: 20 }}>📅</Text>,
+        }}
+      />
+      <Tab.Screen
+        name="Map"
+        component={Map}
+        options={{
+          tabBarIcon: () => <Text style={{ fontSize: 20 }}>🗺️</Text>,
+        }}
+      />
+    </Tab.Navigator>
+  </NavigationContainer>
+);
 }
