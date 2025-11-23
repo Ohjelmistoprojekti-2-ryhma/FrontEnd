@@ -18,14 +18,22 @@ export default function Map({ navigation, route }) {
   const handleMessage = (event) => {
     try {
       const coords = JSON.parse(event.nativeEvent.data);
-      if (onSelectLocation) onSelectLocation(coords);
+
+      const normalized = {
+        latitude: coords.lat,
+        longitude: coords.lng,
+      };
+
+      if (onSelectLocation) onSelectLocation(normalized);
+
       navigation.goBack();
     } catch (err) {
       console.warn("Invalid data from map:", err);
     }
   };
 
-   // When the WebView has loaded, set state and update the map
+
+  // When the WebView has loaded, set state and update the map
   const handleLoadEnd = () => {
     setWebViewReady(true);
     if (webviewRef.current) {
@@ -62,7 +70,7 @@ export default function Map({ navigation, route }) {
         source={{ html }}
         style={{ flex: 1 }}
         javaScriptEnabled={true}
-        onLoadEnd={handleLoadEnd}  
+        onLoadEnd={handleLoadEnd}
         onMessage={handleMessage}
       />
     </View>

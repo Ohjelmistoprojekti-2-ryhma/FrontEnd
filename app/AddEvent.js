@@ -160,7 +160,7 @@ export default function AddEventScreen({ navigation, route }) {
       >
         <Text style={addEventStyles.locationButtonText}>
           {selectedLocation
-            ? `Location: ${selectedLocation.lat.toFixed(4)}, ${selectedLocation.lng.toFixed(4)}`
+            ? `Location: ${selectedLocation.lat}, ${selectedLocation.lng}`
             : "Select location on map"}
         </Text>
       </TouchableOpacity>

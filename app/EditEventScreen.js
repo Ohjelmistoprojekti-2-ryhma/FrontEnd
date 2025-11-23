@@ -8,6 +8,7 @@ import {
     Alert,
     SafeAreaView,
     Platform,
+    ScrollView,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import editEventStyles from "../components/EditEventStyles";
@@ -84,117 +85,119 @@ export default function EditEventScreen({ navigation, route }) {
 
     return (
         <SafeAreaView style={editEventStyles.container}>
-            <Text style={editEventStyles.header}>Edit Event</Text>
+            <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+                <Text style={editEventStyles.header}>Edit Event</Text>
 
-            <View style={editEventStyles.form}>
-                {/* Title */}
-                <Text style={editEventStyles.label}>Event Title</Text>
-                <TextInput
-                    style={editEventStyles.input}
-                    value={title}
-                    onChangeText={setTitle}
-                    placeholder="Event title"
-                />
+                <View style={editEventStyles.form}>
+                    {/* Title */}
+                    <Text style={editEventStyles.label}>Event Title</Text>
+                    <TextInput
+                        style={editEventStyles.input}
+                        value={title}
+                        onChangeText={setTitle}
+                        placeholder="Event title"
+                    />
 
-                {/* Description */}
-                <Text style={editEventStyles.label}>Description</Text>
-                <TextInput
-                    style={[editEventStyles.input, { height: 80 }]}
-                    value={description}
-                    onChangeText={setDescription}
-                    placeholder="Event description"
-                    multiline
-                />
+                    {/* Description */}
+                    <Text style={editEventStyles.label}>Description</Text>
+                    <TextInput
+                        style={[editEventStyles.input, { height: 80 }]}
+                        value={description}
+                        onChangeText={setDescription}
+                        placeholder="Event description"
+                        multiline
+                    />
 
-                {/*Select Contact Button*/}
-                <TouchableOpacity
-                    style={editEventStyles.changeButton}
-                    onPress={() => setShowPicker(!showPicker)}
-                >
-                    <Text style={editEventStyles.changeButtonText} >
-                        {contactName ? `Selected Contact: ${contactName}` : "Select Contact"}
-                    </Text>
-                </TouchableOpacity>
+                    {/*Select Contact Button*/}
+                    <TouchableOpacity
+                        style={editEventStyles.changeButton}
+                        onPress={() => setShowPicker(!showPicker)}
+                    >
+                        <Text style={editEventStyles.changeButtonText} >
+                            {contactName ? `Selected Contact: ${contactName}` : "Select Contact"}
+                        </Text>
+                    </TouchableOpacity>
 
-                {/*Contacts */}
-                {showPicker && (
-                    <View style={editEventStyles.pickerWrapper}>
-                        <Picker
-                            style={editEventStyles.picker}
-                            selectedValue={contactName}
-                            onValueChange={(value) => setContactName(value)}
-                            display={Platform.OS === "ios" ? "spinner" : "default"}
-                        >
-                            <Picker.Item label="No contact" value=""
-                            />
-                            {contacts.map((contact) => (
-                                <Picker.Item key={contact.id}
-                                    label={`${contact.firstName || ""} ${contact.lastName || ""} (${contact.phoneNumbers?.[0]?.number || "No number"})`}
-                                    value={`${contact.firstName || ""} ${contact.lastName || ""}`}
+                    {/*Contacts */}
+                    {showPicker && (
+                        <View style={editEventStyles.pickerWrapper}>
+                            <Picker
+                                style={editEventStyles.picker}
+                                selectedValue={contactName}
+                                onValueChange={(value) => setContactName(value)}
+                                display={Platform.OS === "ios" ? "spinner" : "default"}
+                            >
+                                <Picker.Item label="No contact" value=""
                                 />
-                            ))}
-                        </Picker>
-                    </View>
-                )}
+                                {contacts.map((contact) => (
+                                    <Picker.Item key={contact.id}
+                                        label={`${contact.firstName || ""} ${contact.lastName || ""} (${contact.phoneNumbers?.[0]?.number || "No number"})`}
+                                        value={`${contact.firstName || ""} ${contact.lastName || ""}`}
+                                    />
+                                ))}
+                            </Picker>
+                        </View>
+                    )}
 
-                {/* Date */}
-                <Text style={editEventStyles.label}>Date</Text>
-                <Text style={editEventStyles.dateText}>{formatDate(date)}</Text>
-                <TouchableOpacity
-                    style={editEventStyles.changeButton}
-                    onPress={() => setShowDatePicker(true)}
-                >
-                    <Text style={editEventStyles.changeButtonText}>Change Date</Text>
-                </TouchableOpacity>
+                    {/* Date */}
+                    <Text style={editEventStyles.label}>Date</Text>
+                    <Text style={editEventStyles.dateText}>{formatDate(date)}</Text>
+                    <TouchableOpacity
+                        style={editEventStyles.changeButton}
+                        onPress={() => setShowDatePicker(true)}
+                    >
+                        <Text style={editEventStyles.changeButtonText}>Change Date</Text>
+                    </TouchableOpacity>
 
-                {showDatePicker && (
-                    <DateTimePicker
-                        value={date}
-                        mode="date"
-                        display={Platform.OS === "ios" ? "spinner" : "default"}
-                        onChange={(event, selectedDate) => {
-                            setShowDatePicker(Platform.OS === "ios");
-                            if (selectedDate) {
-                                setDate(selectedDate);
-                            }
-                        }}
-                    />
-                )}
+                    {showDatePicker && (
+                        <DateTimePicker
+                            value={date}
+                            mode="date"
+                            display={Platform.OS === "ios" ? "spinner" : "default"}
+                            onChange={(event, selectedDate) => {
+                                setShowDatePicker(Platform.OS === "ios");
+                                if (selectedDate) {
+                                    setDate(selectedDate);
+                                }
+                            }}
+                        />
+                    )}
 
-                {/* Time */}
-                <Text style={editEventStyles.label}>Time</Text>
-                <Text style={editEventStyles.dateText}>{formatTime(time)}</Text>
-                <TouchableOpacity
-                    style={editEventStyles.changeButton}
-                    onPress={() => setShowTimePicker(true)}
-                >
-                    <Text style={editEventStyles.changeButtonText}>Change Time</Text>
-                </TouchableOpacity>
+                    {/* Time */}
+                    <Text style={editEventStyles.label}>Time</Text>
+                    <Text style={editEventStyles.dateText}>{formatTime(time)}</Text>
+                    <TouchableOpacity
+                        style={editEventStyles.changeButton}
+                        onPress={() => setShowTimePicker(true)}
+                    >
+                        <Text style={editEventStyles.changeButtonText}>Change Time</Text>
+                    </TouchableOpacity>
 
-                {showTimePicker && (
-                    <DateTimePicker
-                        value={time}
-                        mode="time"
-                        display={Platform.OS === "ios" ? "spinner" : "default"}
-                        is24Hour={true}
-                        onChange={(event, selectedTime) => {
-                            setShowTimePicker(Platform.OS === "ios");
-                            if (selectedTime) {
-                                setTime(selectedTime);
-                            }
-                        }}
-                    />
-                )}
+                    {showTimePicker && (
+                        <DateTimePicker
+                            value={time}
+                            mode="time"
+                            display={Platform.OS === "ios" ? "spinner" : "default"}
+                            is24Hour={true}
+                            onChange={(event, selectedTime) => {
+                                setShowTimePicker(Platform.OS === "ios");
+                                if (selectedTime) {
+                                    setTime(selectedTime);
+                                }
+                            }}
+                        />
+                    )}
 
-                {/* Save/Delete Buttons */}
-                <TouchableOpacity style={editEventStyles.saveButton} onPress={handleSave}>
-                    <Text style={editEventStyles.saveButtonText}>Save Changes</Text>
-                </TouchableOpacity>
+                    {/* Save/Delete Buttons */}
+                    <TouchableOpacity style={editEventStyles.saveButton} onPress={handleSave}>
+                        <Text style={editEventStyles.saveButtonText}>Save Changes</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity style={editEventStyles.deleteButton} onPress={handleDelete}>
-                    <Text style={editEventStyles.deleteButtonText}>Delete Event</Text>
-                </TouchableOpacity>
-            </View>
+                    <TouchableOpacity style={editEventStyles.deleteButton} onPress={handleDelete}>
+                        <Text style={editEventStyles.deleteButtonText}>Delete Event</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
         </SafeAreaView >
     );
 }
