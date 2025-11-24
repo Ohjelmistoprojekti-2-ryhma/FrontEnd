@@ -11,9 +11,13 @@ import calendarStyles from "../components/CalendarStyles";
 import holidays from "../data/holidays.json";
 import { loadEvents, saveEvents } from "../app/storage";
 import * as Contacts from 'expo-contacts';
+import { useTheme } from "../components/ThemeContext";
 
 export default function CalendarScreen({ navigation, route }) {
   const [events, setEvents] = useState([]);
+
+  const { darkmode } = useTheme();
+  const styles = calendarStyles(darkmode);
 
   // Set date to the current date by default
   const [selectedDate, setSelectedDate] = useState((() => {
@@ -116,10 +120,19 @@ export default function CalendarScreen({ navigation, route }) {
     .find((h) => h.date === selectedDate);
 
   return (
-    <SafeAreaView style={calendarStyles.container}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: darkmode ? "#121212" : "#fff" }}>
       {/* Calendar */}
       <Calendar
         markingType="custom"
+        theme={{
+          backgroundColor: darkmode ? "#121212" : "#fff",
+          calendarBackground: darkmode ? "#121212" : "#fff",
+          textSectionTitleColor: darkmode ? "#fff" : "#000",
+          todayTextColor: "#fa858f",
+          dayTextColor: darkmode ? "#fff" : "#000",
+          monthTextColor: darkmode ? "#fff" : "#000",
+          arrowColor: darkmode ? "#fff" : "#000",
+        }}
         onDayPress={(day) => setSelectedDate(day.dateString)}
         markedDates={{
           [selectedDate]: { selected: true, selectedColor: "#fa858f" },
@@ -141,15 +154,15 @@ export default function CalendarScreen({ navigation, route }) {
       />
 
       {/* Event List */}
-      <View style={calendarStyles.eventList}>
-        <Text style={calendarStyles.title}>
+      <View style={styles.eventList}>
+        <Text style={styles.title}>
           Events on {formatDate(selectedDate)}:
         </Text>
 
         {/*Holidays*/}
         {selectedHoliday && (
           <View>
-            <Text style={calendarStyles.holidayText}>
+            <Text style={styles.holidayText}>
               {selectedHoliday.name_en}
             </Text>
           </View>
@@ -162,7 +175,7 @@ export default function CalendarScreen({ navigation, route }) {
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <TouchableOpacity
-                style={calendarStyles.eventItem}
+                style={styles.eventItem}
                 onPress={() =>
                   navigation.navigate("EditEvent", {
                     event: item,
@@ -176,18 +189,18 @@ export default function CalendarScreen({ navigation, route }) {
                   })
                 }
               >
-                <Text style={calendarStyles.eventText}>
+                <Text style={styles.eventText}>
                   {item.title}
                   {item.time ? ` at ${item.time}` : ""}
                 </Text>
                 {item.description ? (
-                  <Text style={calendarStyles.eventDescription}>
+                  <Text style={styles.eventDescription}>
                     {item.description}
                   </Text>
                 ) : null}
 
                 {item.contactName ? (
-                  <Text style={calendarStyles.eventDescription}>
+                  <Text style={styles.eventDescription}>
                     Contact: {item.contactName}
                   </Text>
                 ) : null}
@@ -196,13 +209,13 @@ export default function CalendarScreen({ navigation, route }) {
             )}
           />
         ) : (
-          <Text style={calendarStyles.noEvents}>No events for this day</Text>
+          <Text style={styles.noEvents}>No events for this day</Text>
         )}
       </View>
 
       {/* Add Event Button */}
       <TouchableOpacity
-        style={calendarStyles.fab}
+        style={styles.fab}
         onPress={() =>
           navigation.navigate("AddEvent", {
             selectedDate,
@@ -213,13 +226,13 @@ export default function CalendarScreen({ navigation, route }) {
           })
         }
       >
-        <Text style={calendarStyles.fabText}>+</Text>
+        <Text style={styles.fabText}>+</Text>
       </TouchableOpacity>
 
       {/* Update Map Button */}
       <TouchableOpacity
         style={[
-          calendarStyles.fab,
+          styles.fab,
           {
             bottom: 90,
             backgroundColor: "#4CAF50",

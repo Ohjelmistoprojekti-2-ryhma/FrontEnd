@@ -12,6 +12,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import addEventStyles from "../components/AddEventStyles";
 import { Picker } from '@react-native-picker/picker';
 
+import { useTheme } from "../components/ThemeContext";
+
 export default function AddEventScreen({ navigation, route }) {
   const { selectedDate, onSave, location, contacts = [] } = route.params || {};
   const [title, setTitle] = useState("");
@@ -23,6 +25,9 @@ export default function AddEventScreen({ navigation, route }) {
   const [contactName, setContactName] = useState("");
   const [showPicker, setShowPicker] = useState(false);
 
+
+  const { darkmode } = useTheme();
+  const styles = addEventStyles(darkmode);
 
   useEffect(() => {
     if (location) {
@@ -71,12 +76,12 @@ export default function AddEventScreen({ navigation, route }) {
   };
 
   return (
-    <View style={addEventStyles.container}>
-      <Text style={addEventStyles.label}>Date: {selectedDate}</Text>
+    <View style={styles.container}>
+      <Text style={styles.label}>Date: {selectedDate}</Text>
 
       {/* Title */}
       <TextInput
-        style={addEventStyles.input}
+        style={styles.input}
         placeholder="Enter event title"
         value={title}
         onChangeText={setTitle}
@@ -84,7 +89,7 @@ export default function AddEventScreen({ navigation, route }) {
 
       {/* Description */}
       <TextInput
-        style={[addEventStyles.input, { height: 80 }]}
+        style={[styles.input, { height: 80 }]}
         placeholder="Enter event description"
         value={description}
         onChangeText={setDescription}
@@ -93,19 +98,19 @@ export default function AddEventScreen({ navigation, route }) {
 
       {/*Select Contact Button*/}
       <TouchableOpacity
-        style={addEventStyles.changeButton}
+        style={styles.changeButton}
         onPress={() => setShowPicker(!showPicker)}
       >
-        <Text style={addEventStyles.changeButtonText} >
+        <Text style={styles.changeButtonText} >
           {contactName ? `Selected Contact: ${contactName}` : "Select Contact"}
         </Text>
       </TouchableOpacity>
 
       {/*Contacts */}
       {showPicker && (
-        <View style={addEventStyles.pickerWrapper}>
+        <View style={styles.pickerWrapper}>
           <Picker
-            style={addEventStyles.picker}
+            style={styles.picker}
             selectedValue={contactName}
             onValueChange={(value) => setContactName(value)}
           >
@@ -121,12 +126,12 @@ export default function AddEventScreen({ navigation, route }) {
       )}
 
 
-      <Text style={addEventStyles.label}>Time: {formatTime(time)}</Text>
+      <Text style={styles.label}>Time: {formatTime(time)}</Text>
       <TouchableOpacity
-        style={addEventStyles.timeButton}
+        style={styles.timeButton}
         onPress={() => setShowTimePicker(true)}
       >
-        <Text style={addEventStyles.timeButtonText}>Select Time</Text>
+        <Text style={styles.timeButtonText}>Select Time</Text>
       </TouchableOpacity>
 
 
@@ -148,7 +153,7 @@ export default function AddEventScreen({ navigation, route }) {
 
       {/* Location Selector */}
       <TouchableOpacity
-        style={addEventStyles.locationButton}
+        style={styles.locationButton}
         onPress={() =>
           navigation.navigate("Map", {
             eventTitle: title || "Untitled Event",
@@ -158,15 +163,15 @@ export default function AddEventScreen({ navigation, route }) {
         }
 
       >
-        <Text style={addEventStyles.locationButtonText}>
+        <Text style={styles.locationButtonText}>
           {selectedLocation
             ? `Location: ${selectedLocation.lat}, ${selectedLocation.lng}`
             : "Select location on map"}
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={addEventStyles.saveButton} onPress={() => handleSave()}>
-        <Text style={addEventStyles.saveButtonText}>Save Event</Text>
+      <TouchableOpacity style={styles.saveButton} onPress={() => handleSave()}>
+        <Text style={styles.saveButtonText}>Save Event</Text>
       </TouchableOpacity>
     </View>
   );

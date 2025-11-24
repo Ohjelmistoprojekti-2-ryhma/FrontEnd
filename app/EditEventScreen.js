@@ -13,6 +13,7 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import editEventStyles from "../components/EditEventStyles";
 import { Picker } from '@react-native-picker/picker';
+import { useTheme } from "../components/ThemeContext";
 
 export default function EditEventScreen({ navigation, route }) {
     const { event, onSaveEdit, onDelete, contacts } = route.params;
@@ -29,6 +30,9 @@ export default function EditEventScreen({ navigation, route }) {
 
     const [contactName, setContactName] = useState(event.contactName || "");
     const [showPicker, setShowPicker] = useState(false);
+
+    const { darkmode } = useTheme();
+    const styles = editEventStyles(darkmode);
 
     // Save the edited event
     const handleSave = () => {
@@ -84,24 +88,24 @@ export default function EditEventScreen({ navigation, route }) {
     };
 
     return (
-        <SafeAreaView style={editEventStyles.container}>
+        <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
-                <Text style={editEventStyles.header}>Edit Event</Text>
+                <Text style={styles.header}>Edit Event</Text>
 
-                <View style={editEventStyles.form}>
+                <View style={styles.form}>
                     {/* Title */}
-                    <Text style={editEventStyles.label}>Event Title</Text>
+                    <Text style={styles.label}>Event Title</Text>
                     <TextInput
-                        style={editEventStyles.input}
+                        style={styles.input}
                         value={title}
                         onChangeText={setTitle}
                         placeholder="Event title"
                     />
 
                     {/* Description */}
-                    <Text style={editEventStyles.label}>Description</Text>
+                    <Text style={styles.label}>Description</Text>
                     <TextInput
-                        style={[editEventStyles.input, { height: 80 }]}
+                        style={[styles.input, { height: 80 }]}
                         value={description}
                         onChangeText={setDescription}
                         placeholder="Event description"
@@ -110,19 +114,19 @@ export default function EditEventScreen({ navigation, route }) {
 
                     {/*Select Contact Button*/}
                     <TouchableOpacity
-                        style={editEventStyles.changeButton}
+                        style={styles.changeButton}
                         onPress={() => setShowPicker(!showPicker)}
                     >
-                        <Text style={editEventStyles.changeButtonText} >
+                        <Text style={styles.changeButtonText} >
                             {contactName ? `Selected Contact: ${contactName}` : "Select Contact"}
                         </Text>
                     </TouchableOpacity>
 
                     {/*Contacts */}
                     {showPicker && (
-                        <View style={editEventStyles.pickerWrapper}>
+                        <View style={styles.pickerWrapper}>
                             <Picker
-                                style={editEventStyles.picker}
+                                style={styles.picker}
                                 selectedValue={contactName}
                                 onValueChange={(value) => setContactName(value)}
                                 display={Platform.OS === "ios" ? "spinner" : "default"}
@@ -140,13 +144,13 @@ export default function EditEventScreen({ navigation, route }) {
                     )}
 
                     {/* Date */}
-                    <Text style={editEventStyles.label}>Date</Text>
-                    <Text style={editEventStyles.dateText}>{formatDate(date)}</Text>
+                    <Text style={styles.label}>Date</Text>
+                    <Text style={styles.dateText}>{formatDate(date)}</Text>
                     <TouchableOpacity
-                        style={editEventStyles.changeButton}
+                        style={styles.changeButton}
                         onPress={() => setShowDatePicker(true)}
                     >
-                        <Text style={editEventStyles.changeButtonText}>Change Date</Text>
+                        <Text style={styles.changeButtonText}>Change Date</Text>
                     </TouchableOpacity>
 
                     {showDatePicker && (
@@ -164,13 +168,13 @@ export default function EditEventScreen({ navigation, route }) {
                     )}
 
                     {/* Time */}
-                    <Text style={editEventStyles.label}>Time</Text>
-                    <Text style={editEventStyles.dateText}>{formatTime(time)}</Text>
+                    <Text style={styles.label}>Time</Text>
+                    <Text style={styles.dateText}>{formatTime(time)}</Text>
                     <TouchableOpacity
-                        style={editEventStyles.changeButton}
+                        style={styles.changeButton}
                         onPress={() => setShowTimePicker(true)}
                     >
-                        <Text style={editEventStyles.changeButtonText}>Change Time</Text>
+                        <Text style={styles.changeButtonText}>Change Time</Text>
                     </TouchableOpacity>
 
                     {showTimePicker && (
@@ -189,12 +193,12 @@ export default function EditEventScreen({ navigation, route }) {
                     )}
 
                     {/* Save/Delete Buttons */}
-                    <TouchableOpacity style={editEventStyles.saveButton} onPress={handleSave}>
-                        <Text style={editEventStyles.saveButtonText}>Save Changes</Text>
+                    <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+                        <Text style={styles.saveButtonText}>Save Changes</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={editEventStyles.deleteButton} onPress={handleDelete}>
-                        <Text style={editEventStyles.deleteButtonText}>Delete Event</Text>
+                    <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
+                        <Text style={styles.deleteButtonText}>Delete Event</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
