@@ -63,13 +63,20 @@ tai
 ```
 npx expo start
 ```
-Lue konsoliin tullut QR-koodi Expo Go-sovelluksella
+Lue konsoliin tullut QR-koodi Expo Go-sovelluksella (Android) tai kameralla (iOS)
 
 ## Testien suoritus
 Käyttäen npm
 ```
 npm test
 ```
+
+## Jatkokehitysideat
+- [ ] Mahdollisuus piilottaa pyhäpäivät [#38](https://github.com/Ohjelmistoprojekti-2-ryhma/FrontEnd/issues/38)
+- [ ] Kalenterin kielen vaihtaminen [#39](https://github.com/Ohjelmistoprojekti-2-ryhma/FrontEnd/issues/39)
+- [ ] Suosikkipaikkojen lisääminen [#40](https://github.com/Ohjelmistoprojekti-2-ryhma/FrontEnd/issues/40)
+
+Muut jatkokehitysideat sekä puutteet löydät [avoimista issueista](https://github.com/Ohjelmistoprojekti-2-ryhma/FrontEnd/issues).
 
 ## Käytetyt teknologiat: 
 React Native, OpenStreetMap, Leaflet, Jest, Photon
