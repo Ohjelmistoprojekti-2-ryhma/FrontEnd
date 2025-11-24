@@ -2,6 +2,39 @@
 
 Ohjelmistoprojektina ryhmällämme oli kalenteri sovellus, johon käyttäjä voi lisätä päiville tapahtumia jonka lisäksi tärkeimpänä toimintona toimi kartta. Karttaan käyttäjä pystyy lisäämään päivien tapahtumien sijainnit, jotka sitten näkyvät erillisellä kartalla. Tapahtumia voi lisätä jokaiselle päivälle loputtomasti, ja niihin voi lisätä tapahtuman nimi, sijainti, kuvaus, kellonaika, joko valmiiksi lisätyt henkilöt/henkilöiden yhteistiedot tai täysin uusien henkilöiden lisäys, jolloin henkilötiedot tallentuvat muistiin. Kartalla on oma välilehti, josta tapahtumia voi tarkastella tai poistaa.
 
+## Kansiorakenne
+```
+.
+├── __mocks__/@react-navigation/
+│   └── native.js
+├── app/
+│   ├── AddEvent.js
+│   ├── EditEventScreen.js
+│   ├── SettingsScreen.js
+│   ├── calendar.js
+│   ├── nesting.
+│   ├── map.js
+│   └── storage.js
+├── assets/
+│   └── icon.png jne..
+├── components/
+│   ├── AddEventStyles.js
+│   ├── CalendarStyles.js
+│   ├── EditEventStyles.js
+│   ├── MapStyles.js
+│   ├── ThemeContext.js
+│   └── getMapHTML.js
+├── data/
+│   └── holidays.json
+├── tests/
+│   ├── AddEvent.test.js
+│   ├── CalendarScreen.test.js
+│   ├── EditEventScreen.test.js
+│   └── Map.test.js
+├── App.js
+├── package.json
+└── package-lock.json
+```
 ## Vaatimukset
 Ennen ohjemiston asennusta varmista, että sinulla on seuraavat asenettuna:
 - Node.js
